@@ -1,0 +1,44 @@
+{%extends 'base.html'%}
+{%block main_area%}
+    <div class="my-5">
+        <h1 class="text-center mb-5">선형회귀</h1>
+        <div class="text-center">
+            <div>
+                <img src="/score/linear/graph" width="100%">
+            </div>
+            <form name="frm">
+                <div class="input-group">
+                    <input class="form-control" placeholder="공부시간" name="hour" type="number" min="0" max="10">
+                    <button class="btn btn-primary">예상점수</button>
+                </div>
+            </form>
+            <div class="text-center mt-5">
+                <h3>예상 점수는 <span id="score" style="color:red">0</span>점 입니다.</h3>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(frm).on("submit", function(e){
+            e.preventDefault();
+            if($(frm.hour).val()==""){
+                alert("공부시간을 입력하세요!");
+                $(frm.hour).focus();
+            }else{
+                getResult();
+            }
+        });
+
+        function getResult(){
+            $.ajax({
+                type:"get",
+                url:"/score/linear",
+                data: {hour:$(frm.hour).val()},
+                success:function(data){
+                    const score=Math.round(parseFloat(data))
+                    //console.log(score);
+                    $("#score").html(score);
+                }
+            })
+        }
+    </script>
+{%endblock%}

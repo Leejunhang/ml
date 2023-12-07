@@ -1,0 +1,67 @@
+{%extends 'base.html'%}
+{%block main_area%}
+    <div class="my-5">
+        <h1 class="text-center mb-5">다중선형회귀</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form class="card p-5" name="frm">
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">공부장소</span>
+                        <select class="form-select" name="place">
+                            <option value="2">집</option>
+                            <option value="1">도서관</option>
+                            <option value="0">카페</option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">결석횟수</span>
+                        <select class="form-select" name="absent">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">공부시간</span>
+                        <select class="form-select" name="hour">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5" selected>5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary w-100">예상점수</button>
+                </form>
+            </div>
+        </div>
+        <div class="text-center my-5">
+            <h3>예상점수는 <span id="score" style="color:red">0</span>점입니다.</h3>
+        </div>
+    </div>
+    <script>
+        $(frm).on("submit", function(e){
+            e.preventDefault();
+            getResult();
+        });
+
+        function getResult() {
+            $.ajax({
+                type:"get",
+                url:"/score/multi",
+                data:{place:$(frm.place).val(), absent:$(frm.absent).val(), hour:$(frm.hour).val()},
+                success:function(data){
+                    const pred=Math.round(parseFloat(data))
+                    $("#score").html(pred);
+                }
+            });
+        }
+    </script>
+{%endblock%}
